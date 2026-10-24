@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "paths": {
+      "@credebl/common": ["libs/common/src"],
+      "@credebl/common/*": ["libs/common/src/*"],
+      "@credebl/config": ["libs/config/src"],
+      "@credebl/config/*": ["libs/config/src/*"],
+      "@credebl/context": ["libs/context/src"],
+      "@credebl/context/*": ["libs/context/src/*"],
+      "@credebl/enum": ["libs/enum/src"],
+      "@credebl/enum/*": ["libs/enum/src/*"],
+      "@credebl/logger": ["libs/logger/src"],
+      "@credebl/logger/*": ["libs/logger/src/*"],
+      "@credebl/prisma-service": ["libs/prisma-service/src"],
+      "@credebl/prisma-service/*": ["libs/prisma-service/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+}

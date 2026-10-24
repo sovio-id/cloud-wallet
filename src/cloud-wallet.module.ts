@@ -1,0 +1,28 @@
+import { Logger, Module } from '@nestjs/common';
+import { CloudWalletController } from './cloud-wallet.controller';
+import { CloudWalletService } from './cloud-wallet.service';
+import { CommonModule } from '@credebl/common';
+import { CacheModule } from '@nestjs/cache-manager';
+import { PrismaService } from '@credebl/prisma-service';
+import { CloudWalletRepository } from './cloud-wallet.repository';
+import { GlobalConfigModule } from '@credebl/config/global-config.module';
+import { LoggerModule } from '@credebl/logger/logger.module';
+import { ConfigModule as PlatformConfig } from '@credebl/config/config.module';
+import { ContextInterceptorModule } from '@credebl/context/contextInterceptorModule';
+import { MICRO_SERVICE_NAME } from '@credebl/common/common.constant';
+
+@Module({
+  imports: [CommonModule, GlobalConfigModule, LoggerModule, PlatformConfig, ContextInterceptorModule, CacheModule.register()],
+  controllers: [CloudWalletController],
+  providers: [
+    CloudWalletService,
+    CloudWalletRepository,
+    PrismaService,
+    Logger,
+    {
+      provide: MICRO_SERVICE_NAME,
+      useValue: 'cloud-wallet'
+    }
+  ]
+})
+export class CloudWalletModule {}
