@@ -222,7 +222,7 @@ export class CloudWalletService {
    * @param cloudWalletDetails
    * @returns cloud wallet details
    */
-  async createCloudWallet(cloudWalletDetails: ICreateCloudWallet): Promise<IStoredWalletDetails | undefined> {
+  async createCloudWallet(cloudWalletDetails: ICreateCloudWallet): Promise<IStoredWalletDetails> {
     try {
       const { label, connectionImageUrl, email, userId } = cloudWalletDetails;
       const agentPayload = {
@@ -262,15 +262,15 @@ export class CloudWalletService {
           description: ResponseMessages.errorMessages.serverError
         });
       }
-      console.log('createCloudWalletResponse', JSON.stringify(createCloudWalletResponse));
-      const walletKey = await this.commonService.dataEncryption(createCloudWalletResponse.config.walletConfig.token);
-      console.log('walletKey', walletKey);
-      if (!walletKey) {
-        throw new BadRequestException(ResponseMessages.cloudWallet.error.encryptCloudWalletKey, {
-          cause: new Error(),
-          description: ResponseMessages.errorMessages.serverError
-        });
-      }
+      // console.log('createCloudWalletResponse', JSON.stringify(createCloudWalletResponse));
+      // const walletKey = await this.commonService.dataEncryption(createCloudWalletResponse.config.walletConfig.token);
+      // console.log('walletKey', walletKey);
+      // if (!walletKey) {
+      //   throw new BadRequestException(ResponseMessages.cloudWallet.error.encryptCloudWalletKey, {
+      //     cause: new Error(),
+      //     description: ResponseMessages.errorMessages.serverError
+      //   });
+      // }
 
       const cloudWalletResponse: ICloudWalletDetails = {
         createdBy: userId,
@@ -282,7 +282,7 @@ export class CloudWalletService {
         agentApiKey: this.commonService.dataEncryption(createCloudWalletResponse.token),
         agentEndpoint,
         email,
-        key: walletKey,
+        // key: walletKey,
         connectionImageUrl
       };
       const storeCloudWalletDetails = await this.cloudWalletRepository.storeCloudWalletDetails(cloudWalletResponse);
