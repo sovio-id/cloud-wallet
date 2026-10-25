@@ -195,13 +195,17 @@ export class CloudWalletService {
   async _commonCloudWalletInfo(userId: string): Promise<[CloudWallet, string]> {
     const baseWalletDetails = await this.cloudWalletRepository.getCloudWalletDetails(CloudWalletType.BASE_WALLET);
 
+    const { agentEndpoint, agentApiKey } = baseWalletDetails;
     if (!baseWalletDetails) {
       throw new NotFoundException(ResponseMessages.cloudWallet.error.notFoundBaseWallet);
     }
-
-    const getAgentDetails = await this.commonService.httpGet(
-      `${baseWalletDetails?.agentEndpoint}${CommonConstants.URL_AGENT_GET_ENDPOINT}`
-    );
+      const decryptedBaseWalletApiKey = await this.commonService.decryptPassword(agentApiKey);
+      const getAgentDetails = await this.commonService.httpGet(
+        `${agentEndpoint}${CommonConstants.URL_AGENT_GET_ENDPOINT}`,
+        {
+          headers: { authorization: decryptedBaseWalletApiKey }
+        }
+      );
     if (!getAgentDetails?.isInitialized) {
       throw new BadRequestException(ResponseMessages.cloudWallet.error.notReachable);
     }
